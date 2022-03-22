@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include "ros/ros.h"
-#include "final_assignment/Target.h"
-#include "final_assignment/Keyboard.h"
-#include "final_assignment/Avoidcoll.h"
+//#include "final_assignment/Target.h"
+//#include "final_assignment/Keyboard.h"
+//#include "final_assignment/Avoidcoll.h"
 
 using namespace std;
 char choice;
@@ -10,13 +10,12 @@ char choice;
 
 char Menu()
 {
-	cout<<"####################Menù####################"<<endl;
+	cout<<"::::::::::::::::::::::::::::::Menù::::::::::::::::::::::::::::::"<<endl;
 	cout<<"*Type t/T to set a position targe"<<endl;
 	cout<<"*Type k/K for driving the robot using the keyboard"<<endl;
 	cout<<"*Type a/A to equip the robot with a collision avoidance system "<<endl;
 	cout<<"*Type q/Q to exit the simulation"<<endl;
-	cout<<"############################################"<<endl;
-	
+	cout<<"::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"<<endl;
 	cin >> choice;
 	return choice;
 }

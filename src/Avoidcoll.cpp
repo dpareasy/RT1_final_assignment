@@ -1,7 +1,7 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
-#include "final_assignment/Avoidcoll.h"
+//#include "final_assignment/Avoidcoll.h"
 
 using namespace std;
 
@@ -32,7 +32,7 @@ float left_dist[LEFT_DIM];
 //use it also in the Callback function
 ros::Publisher pub; 
 
-void Avoidcoll_navigation(const sensor_msgs::LaserScan::ConstPtr& msg)
+void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
 
 	
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle nh;
 	//define the subscriber to compute the distance from walls
 	//the topic in which the other nodes use to publish their position 
-	ros::Subscriber sub = nh.subscribe("/scan", 1, Avoidcoll_navigation);
+	ros::Subscriber sub = nh.subscribe("/scan", 1, AssistedNavigation);
 	//open the teleop_twist_keyboard
 	system("rosrun teleop_twist_keyboard teleop_twist_keyboard.py");
 	ros::spin();
