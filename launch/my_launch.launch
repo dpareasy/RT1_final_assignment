@@ -103,5 +103,6 @@
 	<!--my nodes-->
 	
 	    <node name = "user_interface" pkg = "final_assignment" type = "user_interface_node" output = "screen" launch-prefix="xterm -e"  required = "true" />
+	    
 
 </launch>

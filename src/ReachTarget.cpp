@@ -19,9 +19,10 @@ ros::Publisher pubCancel;
 //initializing the goal variable
 move_base_msgs::MoveBaseActionGoal my_goal;
 
-//declare coordinates X and Y
-double X;
-double Y;
+//X and Y coord
+double X, Y;
+//set a boolean to state if the goal is set 
+bool goalState = false;
 
 //Here follows two function to save the x and y coordinates
 //values. The functions check if the inputs are number or not
@@ -71,10 +72,14 @@ void Menu()
 	cout<<"____________________________________________"<<endl;
 }
 
-void ReachGoal()
+void InputCoord()
 {
 	X = SetX();
 	Y = SetY();
+}
+
+void ReachGoal()
+{
 	my_goal.goal.target_pose.pose.position.x = X;
 	my_goal.goal.target_pose.pose.position.y = Y;
 	// set the frame_id
@@ -87,6 +92,7 @@ void ReachGoal()
 void CancelGoal()
 {
 	actionlib_msgs::GoalID first_goal;
+	goalState = false;
 	pubCancel.publish(first_goal);
 }
 
@@ -94,7 +100,7 @@ void Decision()
 {
 	for(;;)
 	{
-		system("clear");
+		//system("clear");
 		Menu();
 		char decision;
 		cin >> decision;
@@ -102,12 +108,24 @@ void Decision()
 		{
 			case 'S':
 			case 's':
+				goalState = true;
+				InputCoord();
 				ReachGoal();
+				system("clear");
 				break;
 			case 'C':
 			case 'c':
-				cout<<"cancelling the goal"<<endl;
-				CancelGoal();
+				if (goalState)
+				{
+					cout<<"cancelling the goal"<<endl;
+					CancelGoal();
+				}
+				else
+				{
+					cout<<"No goal set"<<endl;
+				}
+				sleep(1);
+				//system("clear");
 				break;
 			case 'Q':
 			case 'q':
@@ -125,7 +143,7 @@ void Decision()
 
 void GoalFeedback(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg)
 {
-	//ROS_INFO("PoseSubscriber@[%f,%f,%f]", msg -> feedback.base_position.pose.position.x, msg -> feedback.base_position.pose.position.y, msg -> feedback.base_position.pose.position.z);
+	ROS_INFO("PoseSubscriber@[%f,%f,%f]", msg -> feedback.base_position.pose.position.x, msg -> feedback.base_position.pose.position.y, msg -> feedback.base_position.pose.position.z);
 }
 
 int main(int argc, char **argv)
@@ -135,12 +153,15 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "reach_target_node");
 	ros::NodeHandle nh;
 	
+	ros::Subscriber subPose = nh.subscribe("/move_base/feedback", 1, GoalFeedback);
+	
 	//define the publisher to send message for the velocity of the robot
 	pubGoal = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 1);
+	
 	pubCancel = nh.advertise<actionlib_msgs::GoalID>("move_base/cancel",1);
 	
-	ros::Subscriber subPose = nh.subscribe("/move_base/feedback", 1, GoalFeedback);
 	Decision();
+	
 	ros::spin();	
 	return 0;
 }

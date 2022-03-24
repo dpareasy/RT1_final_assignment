@@ -1,15 +1,20 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
-//#include "final_assignment/Keyboard.h"
 #include <sys/types.h>
 #include <unistd.h>
-#include <signal.h>
+
+#define INITIAL_LINEAR_VELOCITY 0.5
+#define INITIAL_ANGULAR_VELOCITY 1
 
 using namespace std;
 
 ros::Publisher pub; 
 geometry_msgs::Twist my_vel;
+
+//initialize the value of the velocities
+float lv = INITIAL_LINEAR_VELOCITY;
+float av = INITIAL_ANGULAR_VELOCITY;
 
 void StopRobot()
 {
@@ -21,16 +26,19 @@ void StopRobot()
 
 void NavigationCommands()
 {
-	cout <<"Enter a choice and press ENTER to move the robot:"<<endl;
-	cout <<"A---rotate right"<<endl;
-	cout <<"D---rotate left"<<endl;
-	cout <<"W---move traightforward"<<endl;
-	cout <<"S---move backward"<<endl;
-	cout <<"E---move front left"<<endl;
-	cout <<"Q---move front right"<<endl;
-	cout <<"X---stop the robot"<<endl;
-	cout <<"R---EXIT the program"<<endl;
-	
+	cout <<"######|Enter a choice|######"<<endl;
+	cout <<" A+ENTER rotate right     "<<endl;
+	cout <<" D+ENTER rotate left      "<<endl;
+	cout <<" W+ENTER move forward     "<<endl;
+	cout <<" S+ENTER move backward    "<<endl;
+	cout <<" E+ENTER move front right  "<<endl;
+	cout <<" Q+ENTER move front left "<<endl;
+	cout <<"############################"<<endl;
+	cout <<" 1+ENTER to increase linear velocity "<<endl;
+	cout <<" 2+ENTER to increase angular velocity"<<endl;
+	cout <<" X+ENTER stop the robot"<<endl;
+	cout <<" R+ENTER to EXIT the program"<<endl;
+	cout <<"############################"<<endl;
 }
 
 void Navigation()
@@ -45,39 +53,47 @@ void Navigation()
 		{
 			case 'A':
 			case 'a':
-				my_vel.linear.x = 0;
-				my_vel.angular.z = -1;
+				my_vel.linear.x = lv*0;
+				my_vel.angular.z = -av;
 				break;
 				
 			
 			case 'D':
 			case 'd':
-				my_vel.linear.x = 0;
-				my_vel.angular.z = 1;
+				my_vel.linear.x = lv*0;
+				my_vel.angular.z = av;
 				break;
 			
 			case 'W':
 			case 'w':
-				my_vel.linear.x = 0.5;
-				my_vel.angular.z = 0;
+				my_vel.linear.x = lv;
+				my_vel.angular.z = av*0;
 				break;
 			
 			case 'S':
 			case 's':
-				my_vel.linear.x = -0.5;
-				my_vel.angular.z = 0;
+				my_vel.linear.x = -lv;
+				my_vel.angular.z = av*0;
 				break;
 			
 			case 'E':
 			case 'e':
-				my_vel.linear.x = 0.5;
-				my_vel.angular.z = -1;
+				my_vel.linear.x = lv;
+				my_vel.angular.z = -av;
 				break;
 			
 			case 'Q':
 			case 'q':
-				my_vel.linear.x = 0.5;
-				my_vel.angular.z = 1;
+				my_vel.linear.x = lv;
+				my_vel.angular.z = av;
+				break;
+			case '1':
+				my_vel.linear.x *= 1.2;
+				my_vel.angular.z *= 1.2;
+				break;
+			case '2':
+				my_vel.linear.x *= 0.8;
+				my_vel.angular.z *= 0.8;
 				break;
 			case 'X':
 			case 'x':

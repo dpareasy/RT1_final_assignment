@@ -140,10 +140,10 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(user_interface_node src/ui.cpp)
-add_executable(reach_target_node src/reach_target.cpp)
-add_executable(teleopkey_node src/keyboard.cpp)
-add_executable(teleopkey_avoidcoll_node src/Avoidcoll.cpp)
+add_executable(user_interface_node src/UI.cpp)
+add_executable(reach_target_node src/ReachTarget.cpp)
+add_executable(teleopkey_node src/KeyboardNavigation.cpp)
+add_executable(teleopkey_avoidcoll_node src/AssistedDrive.cpp)
 
 
 ## Rename C++ executable without prefix
