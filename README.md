@@ -38,7 +38,7 @@ roslaunch final_assignment my_launch.launch
 
 It includes the launch file for Gazebo and Rviz, the one for move_base algorithm and UI.cpp node, which according to the user choiche will launche the other three nodes with a syscall.
 
-##Robot behaviours##
+## Robot behaviours ##
 
 s
 
