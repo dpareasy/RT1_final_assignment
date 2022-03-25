@@ -6,7 +6,7 @@
 #include "time.h"
 #include <iostream> 
 #include <sstream> 
-#include <regex>
+
 
 using namespace std;
 
@@ -72,14 +72,13 @@ void Menu()
 	cout<<"____________________________________________"<<endl;
 }
 
-void InputCoord()
-{
+void InputCoord(){
 	X = SetX();
 	Y = SetY();
 }
 
-void ReachGoal()
-{
+void ReachGoal(){
+
 	my_goal.goal.target_pose.pose.position.x = X;
 	my_goal.goal.target_pose.pose.position.y = Y;
 	// set the frame_id
@@ -89,43 +88,50 @@ void ReachGoal()
 	pubGoal.publish(my_goal);
 }
 
-void CancelGoal()
-{
+void CancelGoal(){
+
 	actionlib_msgs::GoalID first_goal;
 	goalState = false;
 	pubCancel.publish(first_goal);
 }
 
-void Decision()
-{
-	for(;;)
-	{
+void Decision(){
+
+	for(;;){
+	
 		//system("clear");
 		Menu();
 		char decision;
 		cin >> decision;
-		switch (decision)
-		{
+		switch (decision){
 			case 'S':
 			case 's':
-				goalState = true;
-				InputCoord();
-				ReachGoal();
-				system("clear");
+				if (goalState){
+				
+					cout<<"A goal is alreasy set, wait until the reachment of the target or type 'c' to cancel the goal and set another goal"<<endl;
+		
+				}
+				else{
+					goalState = true;
+					system("clear");
+					InputCoord();
+					ReachGoal();
+					system("clear");
+				}
 				break;
 			case 'C':
 			case 'c':
-				if (goalState)
-				{
+				if (goalState){
+				
 					cout<<"cancelling the goal"<<endl;
 					CancelGoal();
 				}
-				else
-				{
+				else{
+				
 					cout<<"No goal set"<<endl;
 				}
 				sleep(1);
-				//system("clear");
+				system("clear");
 				break;
 			case 'Q':
 			case 'q':
@@ -141,13 +147,15 @@ void Decision()
 	}
 }
 
-void GoalFeedback(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg)
-{
-	ROS_INFO("PoseSubscriber@[%f,%f,%f]", msg -> feedback.base_position.pose.position.x, msg -> feedback.base_position.pose.position.y, msg -> feedback.base_position.pose.position.z);
+void GoalFeedback(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
+
+	float X = msg -> feedback.base_position.pose.position.x;
+	float Y = msg -> feedback.base_position.pose.position.y;
+	float Z = msg -> feedback.base_position.pose.position.z;
+	ROS_INFO("PoseSubscriber@[%f,%f,%f]", X , Y, Z);
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
 	
 	//initialize the node, setup the NodeHandle for handling the communication with the ROS system
 	ros::init(argc, argv, "reach_target_node");
@@ -159,7 +167,7 @@ int main(int argc, char **argv)
 	pubGoal = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 1);
 	
 	pubCancel = nh.advertise<actionlib_msgs::GoalID>("move_base/cancel",1);
-	
+	system("clear");
 	Decision();
 	
 	ros::spin();	

@@ -16,16 +16,16 @@ geometry_msgs::Twist my_vel;
 float lv = INITIAL_LINEAR_VELOCITY;
 float av = INITIAL_ANGULAR_VELOCITY;
 
-void StopRobot()
-{
+void StopRobot(){
+
 	my_vel.linear.x = 0;
 	my_vel.angular.z = 0;
 	pub.publish(my_vel);
 	cout<<"Set velocities equal to zero"<<endl;
 }
 
-void NavigationCommands()
-{
+void NavigationCommands(){
+
 	cout <<"######|Enter a choice|######"<<endl;
 	cout <<" A+ENTER rotate right     "<<endl;
 	cout <<" D+ENTER rotate left      "<<endl;
@@ -41,27 +41,27 @@ void NavigationCommands()
 	cout <<"############################"<<endl;
 }
 
-void Navigation()
-{
-	for(;;)
-	{	
+void Navigation(){
+
+	for(;;){
+		
 		system("clear");
 		NavigationCommands();
 		char choice;
 		cin >> choice;
-		switch(choice)
-		{
+		switch(choice){
+		
 			case 'A':
 			case 'a':
 				my_vel.linear.x = lv*0;
-				my_vel.angular.z = -av;
+				my_vel.angular.z = av;
 				break;
 				
 			
 			case 'D':
 			case 'd':
 				my_vel.linear.x = lv*0;
-				my_vel.angular.z = av;
+				my_vel.angular.z = -av;
 				break;
 			
 			case 'W':
@@ -112,8 +112,8 @@ void Navigation()
 	}
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
+
 	//initialize the node, setup the NodeHandle for handling the communication with the ROS system
 	ros::init(argc, argv, "teleopkey_node");
 	ros::NodeHandle nh;

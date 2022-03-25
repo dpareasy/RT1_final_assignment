@@ -4,8 +4,8 @@
 using namespace std;
 char choice;
 
-char Menu()
-{
+char Menu(){
+
 	cout<<"::::::::::::::::::::::::::::|Menù|:::::::::::::::::::::::::::"<<endl;
 	cout<<" Type T to set a position target"<<endl;
 	cout<<" Type K for driving the robot using the keyboard"<<endl;
@@ -16,18 +16,16 @@ char Menu()
 	return choice;
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv){
     //initialize the node, setup the NodeHandle for handling the communication with the ROS system
 	ros::init(argc, argv, "user_interface_node");
 	ros::NodeHandle nh;
 	
     //while loop for constantly asking the user to insert a command 
-    for(;;)
-    {
+    for(;;){
 
-        switch(Menu())
-        {
+        switch(Menu()){
+        
             case 'T':
             case 't':
             	cout<<"Reaching target modality has been chosen"<<endl;
@@ -43,7 +41,9 @@ int main(int argc, char **argv)
             case 'A':
             case 'a':
             	cout<<"Assistive drive navigation modality has been chosen"<<endl;
-            	system("rosrun final_assignment teleopkey_avoidcoll_node");
+            	system("rosrun final_assignment teleopkey_avoidcoll_node  &");
+            	system("rosrun teleop_twist_keyboard teleop_twist_keyboard.py cmd_vel:=cmd_vel_assisted");
+            	
  
                 break;
 			case 'Q':
