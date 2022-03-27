@@ -25,8 +25,9 @@ The architecture should be able to get the user request and let the robot execut
 In particulare the folder named 'src' contains:
 - `UI.cpp`:  which is the node for the user interface 
 - `ReachTarget.cpp`: which is the node for the autonomous navigation of the robot
-- `KeyboardnNavigation.cpp`: which is the node for the navigation with the keyboard
 - `AssistedNavigation.cpp`: which is the node for the navigation with assisted drive
+
+The one used for the simple navigation with the keyboard is the teleop_twist_keyboard node.
 
 ## How to run ##
 
@@ -36,8 +37,25 @@ In order to launch the simulation there is a .lunch file that can be launched wi
 roslaunch final_assignment my_launch.launch
 ```
 
-It includes the launch file for Gazebo and Rviz, the one for move_base algorithm and UI.cpp node, which according to the user choiche will launche the other three nodes with a syscall.
+It includes the launchfile for the simulation, the move_base package and the UI.cpp node which will run separately the other three nodes with a system call.
 
-## Robot behaviours ##
+## Robot behaviors ##
+
+When the user launches the simulation, the robot is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, the user can choose three different behaviors:
+
+```
+1 - The user will set a target on the environment in the ReachTarget node, and the robot must reach it.  
+
+2 - The Robot can move around the environment, driven by the user thanks to the teleop_twist_keyboard node of ROS.
+
+3 - The robot can move around the environment, driven by the user thanks to the teleop_twist_keyboard node of ROS, by avoiding the walls thanks to a system of assisted navigation implemented in the AssistedNavigation node.
+```
+
+Concerning the ReachTarget node, I have implemented a timeout to avoid the robot trying to reach a point out of the map. If the target point won't be reached by the robot after a certain time, the goal will be canceled.
+
+## About Software Architectures ##
+
+
+
 
 
