@@ -14,19 +14,19 @@ The architecture should be able to get the user request and let the robot execut
 
 ## Content of the package ##
 
-* `world`: it's a folder that defines the world  within the robot shold move
-* `launch`: it's a folder containing all the files with .launch extension needed to launch the simulation
-* `src`: it's a folder containing all C++ executables used in this package
-* `CMakeList.txt`: it's a file with informations about the compilation
-* `package.xml`: it's a file with insofrmations about the compilation
-* `urdf`: it's a folder containing the information about the robot
-* `config`: it's a folder containing a file useful for simulation tools
+* **world**: it's a folder that defines the world  within the robot shold move
+* **launch**: it's a folder containing all the files with .launch extension needed to launch the simulation
+* **src**: it's a folder containing all C++ executables used in this package
+* **CMakeList.txt**: it's a file with informations about the compilation
+* **package.xml**: it's a file with insofrmations about the compilation
+* **urdf**: it's a folder containing the information about the robot
+* **config**: it's a folder containing a file useful for simulation tools
 
 In particulare the folder named 'src' contains:
-- UI.cpp:  which is the node for the user interface 
-- ReachTarget.cpp: which is the node for the autonomous navigation of the robot
-- KeyboardnNavigation.cpp: which is the node for the navigation with the keyboard
-- AssistedNavigation.cpp: which is the node for the navigation with assisted drive
+- `UI.cpp`:  which is the node for the user interface 
+- `ReachTarget.cpp`: which is the node for the autonomous navigation of the robot
+- `KeyboardnNavigation.cpp`: which is the node for the navigation with the keyboard
+- `AssistedNavigation.cpp`: which is the node for the navigation with assisted drive
 
 ## How to run ##
 
@@ -40,5 +40,4 @@ It includes the launch file for Gazebo and Rviz, the one for move_base algorithm
 
 ## Robot behaviours ##
 
-s
 
