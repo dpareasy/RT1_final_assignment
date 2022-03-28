@@ -54,7 +54,8 @@ When the user launches the simulation, the robot is spawned in a pre-built envir
 Concerning the ReachTarget node, I have implemented a timeout to avoid the robot trying to reach a point out of the map. If the target point won't be reached by the robot after a certain time, the goal will be canceled.
 
 ## About Software Architectures ##
-I decided to divide the project into four different nodes: 
+I decided to divide the project into four different nodes to maintain a certain degeree of modularity:
+
 * The UI.cpp;
 * The ReachTarget.cpp; 
 * The AssistedDrive.cpp;
