@@ -59,6 +59,7 @@ I decided to divide the project into four different nodes:
 * The ReachTarget.cpp; 
 * The AssistedDrive.cpp;
 * The teleop_twist_keyboard.py;
+
 From the UI.CPP, the user can choose the modality for moving the robot by typing commands from the keyboards. The user can decide on the autonomous navigation, the simple navigation with the keyboard, or the navigation with the keyboard assisted by a system of the assisted drive. If the user chooses the first modality, the UI.CPP will launch the ReachTarget node. This node will publish on the `/move_base/goal` topic the point decided by the user that the robot has to reach. In the same node, another publisher has the function of canceling the goal, giving the user the faculty of changing the robot goal by publishing on the `/move_base/cancel` topic.
 If the choice falls into the simple keyboard navigation, the UI.cpp will launch the teleop_twist_keyboard.py provided by ROS, and the user can drive the robot with specific commands.
 Finally, if the user chooses the third modality, the UI.cpp node will launch a launch file containing the teleop_twist_keyboard.py and the AssistedDrive.cpp node. The latter will get info on the distance from walls by subscribing from the `/scan` topic, on the current velocity of the robot on the map by subscribing from the `/cmd_vel_assisted` topic, and will publish the velocity values on the `/cmd_vel` topic. If the robot gets too close to the walls, the laser scan with which the robot is equipped will detect it, and the system of the assisted drive will adjust the trajectory.
