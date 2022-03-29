@@ -53,7 +53,7 @@ It includes the launchfile for the simulation and the move_base package and for 
 </launch>
 
 ```
-Te UI.cpp node will run separately the other three nodes by using system calls:
+The UI.cpp node will run separately the other three nodes by using system calls:
 
 - To run a single node:
 
