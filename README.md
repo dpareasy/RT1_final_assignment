@@ -131,6 +131,7 @@ for(;;){
 #### Fucntions used ####
 
 SetGoal function:
+
 Used to set a goal to reach.
 
 ```
@@ -149,6 +150,7 @@ void SetGoal(){
 
 
 CancelGoal():
+
 Used to cancel, if it exists, the last goal set.
 
 ```
@@ -171,7 +173,9 @@ CancelGoal(){
 ```
 
 CurrentGoal():
+
 Used to store the position of the current goal.
+
 It subscribes to the /move_base/goal topic.
 
 ```
@@ -184,7 +188,9 @@ CurrentGoal(){
 
 
 GoalStatus():
+
 Used to check the status of the goal to inform the user that a goal is reached.
+
 It subscribes to the /move_base/feedback topic the position of the robot within the environment.
 
 ```
@@ -194,7 +200,7 @@ GoalStatus(){
 	
 	if (goalStatus){
 	
-		if(robot_pose - goalId < error){
+		if(robot_pose - goalID < error){
 		
 			inform the user that the goal is reached;
 			
@@ -206,5 +212,50 @@ GoalStatus(){
 }
 ```
 
+### AssistedDrive.cpp ###
 
+In this node one subscriber subscribes to /cmd_vel_assisted topic to get the robot velocities from the teleop_twist_keyboard node and a second one subscribes to /scan topic to get the distance of the robot from the walls. There is also a publisher to publish velocities that the robot has to move within the environment.
 
+```
+
+Divide ranges array into five subarrays;
+//only three are used (front_right and front_left are not used)
+
+array1 = right side;
+array3 = front;
+array5 = left side;
+
+compute minimum value for each of the three arrays;
+
+get velocities from the teleop_twist node and update current velocities;
+
+if (front <= threashold){
+
+	warn the user and ask to turn left or right;
+	
+	linear velocity = 0;
+}
+
+else if (left <= threshold){
+
+	warn the user;
+	
+	turn right to adjust trajectory;
+}
+
+else if (right <= threshold){
+
+	warn the user;
+	
+	turn left to adjust trajectory;
+}
+
+publish velocities;
+```
+## Limitations and possible improvements ##
+
+One limitation could be that the robot does not save the values of the goals in a queue. To set another goal, the user has to wait until the robot reaches the first goal.
+Another limitation of the program is that I haven't implemented a system that automatically cancels the unreachable points on the map. In this case, the robot will infinitely try to reach these points unless the user manually cancels them once noticing the unreachability with the graphical help of the map. 
+It comes clear that two possible improvements to the code could be:
+* The implementation of a system for saving in a queue the goals that the user could give in input to the program
+* A way to state if the user has set an unreachable point for automatically deleting it.
