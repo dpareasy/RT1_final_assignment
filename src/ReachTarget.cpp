@@ -108,8 +108,9 @@ void InputCoord(){
 
 
 //function for setting the coordinates of the goal
-void ReachGoal(){
+void SetGoal(){
 
+	InputCoord();
 	//setting x and y coordinates
 	my_goal.goal.target_pose.pose.position.x = X;
 	my_goal.goal.target_pose.pose.position.y = Y;
@@ -130,7 +131,7 @@ void CancelGoal(){
 
 	if(goalStatus){
 		
-		cout<<"canceling the goal"<<endl;
+		
 		//set the goal to cancel equal to the current goal
 		lastGoal.id = goalID;
 		
@@ -163,13 +164,12 @@ void Decision(){
 				else{
 					
 					system("clear");
-					InputCoord();
-					ReachGoal();
+					SetGoal();
 				}
 				break;
 			case 'C':
 			case 'c':
-				
+				cout<<"canceling the goal"<<endl;
 				CancelGoal();
 				sleep(1);
 				system("clear");
@@ -207,12 +207,13 @@ void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
 		if(abs(msg -> feedback.base_position.pose.position.x - xG) <= error && abs(msg -> feedback.base_position.pose.position.y - yG) <= error)
 		{
 			system("clear");
-			// cancel goal
-			CancelGoal();
-
-			system("clear");
+			
 			// print
 			std::cout << "Goal reached successfully!\n";
+			
+			// cancel goal
+			CancelGoal();
+			
 			
 			//showing the menu to the user
 			Menu();
