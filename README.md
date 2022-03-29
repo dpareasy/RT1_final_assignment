@@ -18,14 +18,14 @@ The architecture should be able to get the user request and let the robot execut
 * **launch**: it's a folder containing all the files with .launch extension needed to launch the simulation;
 * **src**: it's a folder containing all C++ executables used in this package;
 * **CMakeList.txt**: it's a file with informations about the compilation;
-* **package.xml**: it's a file with insofrmations about the compilation;
+* **package.xml**: it's a file with insoformations about the compilation;
 * **urdf**: it's a folder containing the information about the robot;
 * **config**: it's a folder containing a file useful for simulation tools;
 
-In particulare the folder named 'src' contains:
-- `UI.cpp`:  which is the node for the user interface 
-- `ReachTarget.cpp`: which is the node for the autonomous navigation of the robot
-- `AssistedDrive.cpp`: which is the node for the navigation with assisted drive
+In particular the folder named 'src' contains:
+- `UI.cpp`:  which is the node for the user interface; 
+- `ReachTarget.cpp`: which is the node for the autonomous navigation of the robot;
+- `AssistedDrive.cpp`: which is the node for the navigation with assisted drive;
 
 The one used for the simple navigation with the keyboard is the teleop_twist_keyboard node.
 
@@ -37,35 +37,52 @@ In order to launch the simulation there is a .lunch file that can be launched wi
 roslaunch final_assignment my_launch.launch
 ```
 
-It includes the launchfile for the simulation, the move_base package and the UI.cpp node which will run separately the other three nodes with a system call.
+It includes the launchfile for the simulation, the move_base package and the UI.cpp node. which will run separately the other three nodes by using system calls.
+
+```
+<?xml version="1.0"?>
+		
+ <launch>
+ 
+ 	<!-- including all the launchfiles for the simulation-->
+ 	<include file = "$(find final_assignment)/launch/simulation_gmapping.launch" />
+	<include file = "$(find final_assignment)/launch/move_base.launch" />
+	
+	<!--my UI node-->	
+	<node name = "user_interface" pkg = "final_assignment" type = "user_interface_node" output = "screen" launch-prefix="xterm -e"  required = "true" />
+</launch>
+
+```
 
 ## Robot behaviors ##
 
-When the user launches the simulation, the robot, provided with a laser-scan, is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, the user can choose three different behaviors:
+When the user launches the simulation, the robot, provided with a laser-scan, is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, three different behaviors can be chosen:
 
 ```
-1) The user can set a target within the environment in the ReachTarget node, that the robot must reach.  
+1) The user can set a target within the environment in the ReachTarget node, that the robot must reach. A certain goal can also be canceled.  
 
 2) The user can make the robot move around the environment, driven with the teleop_twist_keyboard node of ROS.
 
-3) The user can make the robot move around the environment, driven with the teleop_twist_keyboard node of ROS, by avoiding the walls thanks to a system of assisted navigation implemented in the AssistedNavigation node.
+3) The user can make the robot move around the environment, driven with the teleop_twist_keyboard node of ROS, by avoiding the walls thanks to a system of assisted navigation implemented in the AssistedNavigation node.  If the robot gets too close to the walls, the laser scan with which the robot is equipped will detect it, and the system of the assisted drive will adjust the trajectory.
 ```
 
 ## About Software Architecture ##
-I decided to divide the project into four different nodes to maintain a certain degeree of modularity:
+I decided to divide the project into four different nodes to maintain a certain degree of modularity:
 
 * The UI.cpp;
 * The ReachTarget.cpp; 
 * The AssistedDrive.cpp;
 * The teleop_twist_keyboard.py;
 
-From the UI.cpp, the user can choose the modality for moving the robot by typing commands from the keyboards. The user can decide on the autonomous navigation, the simple navigation with the keyboard, or the navigation with the keyboard assisted by a system of the assisted drive. If the user chooses the first modality, the UI.cpp will launch the ReachTarget node. This node will publish on the `/move_base/goal` topic the point decided by the user that the robot has to reach. In the same node, another publisher has the function of canceling the goal, giving the user the faculty of changing the goal by publishing on the `/move_base/cancel` topic.
-If the choice falls into the simple keyboard navigation, the UI.cpp will launch the teleop_twist_keyboard.py provided by ROS, and the user can drive the robot with specific commands.
-Finally, if the user chooses the third modality, the UI.cpp node will launch a launch file containing the teleop_twist_keyboard.py and the AssistedDrive.cpp node. The latter will get info on the distance from walls by subscribing from the `/scan` topic, on the current velocity of the robot on the map by subscribing from the `/cmd_vel_assisted` topic, and will publish the velocity values on the `/cmd_vel` topic. If the robot gets too close to the walls, the laser scan with which the robot is equipped will detect it, and the system of the assisted drive will adjust the trajectory.
+From the UI.cpp, the user can choose the modality for moving the robot by typing commands from the keyboards. The user can decide on the autonomous navigation, the simple navigation with the keyboard, or the navigation with the keyboard provided by a system of the assisted drive. If the user chooses the first modality, the `UI.cpp` will launch the `ReachTarget.cpp` node. This node will publish on the `/move_base/goal` topic the point decided by the user that the robot has to reach. In the same node, another publisher has the function of canceling the goal, giving the user the faculty of changing the goal by publishing on the `/move_base/cancel` topic. Here the position of the robot and of the goal by subscribing respectively on `/move_base/feedback` topic and `/move_base/goal` topic. 
+If the choice falls into the simple keyboard navigation, the `UI.cpp` will launch the `teleop_twist_keyboard.py` provided by ROS, and the user can drive the robot with specific commands by publishing velocities on `/cmd_vel` topic.
+Finally, if the user chooses the third modality, the `UI.cpp` node will launch a launch file containing the `teleop_twist_keyboard.py` and the `AssistedDrive.cpp` node. The latter will get info on the distance from walls by subscribing from the `/scan` topic, on the current velocity of the robot on the map by subscribing from the `/cmd_vel_assisted` topic, and will publish the velocity values on the `/cmd_vel` topic.
 
 ## Pseudocodes ##
 
 ### UI.cpp ###
+
+Choose modality:
 
 ```
 for(;;){
@@ -97,7 +114,7 @@ for(;;){
 ### ReachTarget.cpp ###
 
 
-Choose modality:
+Choose a command:
 
 ```
 for(;;){
@@ -176,7 +193,7 @@ CurrentGoal():
 
 Used to store the position of the current goal.
 
-It subscribes to the /move_base/goal topic.
+It subscribes to the `/move_base/goal` topic.
 
 ```
 CurrentGoal(){
@@ -191,7 +208,7 @@ GoalStatus():
 
 Used to check the status of the goal to inform the user that a goal is reached.
 
-It subscribes to the /move_base/feedback topic the position of the robot within the environment.
+It subscribes to the `/move_base/feedback` topic the position of the robot within the environment.
 
 ```
 GoalStatus(){
@@ -200,7 +217,7 @@ GoalStatus(){
 	
 	if (goalStatus){
 	
-		if(robot_pose - goalID < error){
+		if(robot_pose - goal_pose < error){
 		
 			inform the user that the goal is reached;
 			
@@ -214,7 +231,7 @@ GoalStatus(){
 
 ### AssistedDrive.cpp ###
 
-In this node one subscriber subscribes to /cmd_vel_assisted topic to get the robot velocities from the teleop_twist_keyboard node and a second one subscribes to /scan topic to get the distance of the robot from the walls. There is also a publisher to publish velocities that the robot has to move within the environment.
+In this node one subscriber subscribes on `/cmd_vel_assisted` topic to get the robot velocities from the teleop_twist_keyboard node and a second one subscribes on `/scan` topic to get the distance of the robot from the walls. There is also a publisher to publish velocities that the robot has to move within the environment, publishing on `/cmd_vel`.
 
 ```
 
@@ -254,7 +271,7 @@ publish velocities;
 ```
 ## Limitations and possible improvements ##
 
-One limitation could be that the robot does not save the values of the goals in a queue. To set another goal, the user has to wait until the robot reaches the first goal.
+One limitation of this program is that the robot does not save the values of the goals in a queue. To set another goal, the user has to wait until the robot reaches the first goal.
 Another limitation of the program is that I haven't implemented a system that automatically cancels the unreachable points on the map. In this case, the robot will infinitely try to reach these points unless the user manually cancels them once noticing the unreachability with the graphical help of the map. 
 
 It comes clear that two possible improvements to the code could be:
