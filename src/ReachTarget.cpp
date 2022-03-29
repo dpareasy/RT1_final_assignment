@@ -93,7 +93,7 @@ void Menu(){
 	cout<<"____________________Menù____________________\r"<<endl;
 	cout<<"*Type 's' if you wanto to set a goal point\r"<<endl;
 	cout<<"*Type 'c' if you want to cancel the last goal\r"<<endl;
-	cout<<"*Type 'q' if you want to exit the node\r"<<endl;
+	cout<<"*Type 'q' if you want to change modality\r"<<endl;
 	cout<<"____________________________________________\r"<<endl;
 }
 
@@ -131,9 +131,11 @@ void CancelGoal(){
 
 	if(goalStatus){
 		
-		
+		system("clear");
 		//set the goal to cancel equal to the current goal
 		lastGoal.id = goalID;
+		
+		cout<<"Canceling goal"<<endl;
 		
 		pubCancel.publish(lastGoal);
 		
@@ -169,11 +171,10 @@ void Decision(){
 				break;
 			case 'C':
 			case 'c':
-				cout<<"canceling the goal"<<endl;
+				
 				CancelGoal();
 				sleep(1);
-				system("clear");
-				
+				system("clear");								
 				break;
 			case 'Q':
 			case 'q':

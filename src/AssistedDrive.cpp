@@ -163,7 +163,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	if (min_front <= th){
 	
 		system("clear");
-		cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+		cout<<"type 'Q' on this konsole if you want to change modality\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 		
 		//warn the user
 		cout<<"!!WARNING!!\nWall detected in front: tuorn either left or right"<<endl;
@@ -176,7 +176,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	else if (min_left <= th){
 			
 			system("clear");
-			cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+			cout<<"type 'Q' on this konsole if you want to change modality\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 			//ask the user to turn right
 			cout <<"!!WARNING!!\nWall detected on the left, adjusting trajectory!"<<endl;
 			
@@ -189,7 +189,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	else if (min_right <= th){
 	
 			system("clear");
-			cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+			cout<<"type 'Q' on this konsole if you want to change modality\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 			//ask the user tu turn left
 			cout <<"!!WARNING!!\nWall detected on the right, adjusting trajectory!"<<endl;		
 			
@@ -199,10 +199,10 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	}
 	else{		
 		system("clear");
-		cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+		cout<<"type 'Q' on this konsole if you want to change modality\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 		
 		//No wall detected
-		cout<<"No walls in the vicinity, drive the robot with the keyboard!"<<endl;
+		cout<<"No walls in the vicinity!\nDrive the robot with the keyboard in the other konsole!"<<endl;
 	}
 	//publishing the value of the velocities		
 	pub.publish(my_vel);
