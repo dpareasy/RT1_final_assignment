@@ -37,7 +37,7 @@ In order to launch the simulation there is a .lunch file that can be launched wi
 roslaunch final_assignment my_launch.launch
 ```
 
-It includes the launchfile for the simulation, the move_base package and the UI.cpp node. which will run separately the other three nodes by using system calls.
+It includes the launchfile for the simulation and the move_base package and for the UI.cpp node. 
 
 ```
 <?xml version="1.0"?>
@@ -53,7 +53,23 @@ It includes the launchfile for the simulation, the move_base package and the UI.
 </launch>
 
 ```
+Te UI.cpp node will run separately the other three nodes by using system calls:
 
+- To run a single node:
+
+```
+system("rosrun final_assignment reach_target_node");
+
+system("rosrun teleop_twist_keyboard teleop_twist_keyboard.py");
+
+```
+
+- To run multiple nodes:
+
+```
+system("roslaunch final_assignment AssistedLaunch.launch");
+
+```
 ## Robot behaviors ##
 
 When the user launches the simulation, the robot, provided with a laser-scan, is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, three different behaviors can be chosen:
