@@ -11,9 +11,6 @@
 using namespace std;
 
 
-
-//#define TIMEOUT 180000000
-
 //The publisher is defined as global variable because 
 //I have to initialize it in the Main function but 
 //use it also in the Reach_point function
@@ -24,16 +21,16 @@ ros::Publisher pubCancel;
 //initializing the goal variable
 move_base_msgs::MoveBaseActionGoal my_goal;
 
+//variable for the last goal to cancel
+actionlib_msgs::GoalID lastGoal;
+
+
+//variable used to save the actual goal
 std::string goalID;
 
- 
-
-//X and Y coord
+ //X and Y coord
 double X, Y;
 
-float Xc = 0;
-float Yc = 0;
-float Zc = 0;
 
 // define variables to store the goal
 float xG;
@@ -42,11 +39,17 @@ float yG;
 //set a boolean to state if the goal is set 
 bool goalStatus = false;
 
+
+//define an error threshold 
+//used for the position of the robot
 float error = 0.5;
+
 
 //Here follows two function to save the x and y coordinates
 //values. The functions check if the inputs are number or not
-//if they are, return the values
+//if they are, return the values, in the other case the function
+//will continue to ask to insert a value
+//set X coordinate
 double SetX(){
 	
 	double x;
@@ -65,12 +68,13 @@ double SetX(){
 }
 
 
+//set Y coordinate
 double SetY(){
 
 	double y;
    	 while (true){
         	cout << "Enter the value for the Y coordinate" << endl;
-        	cout << " Y = " ;
+        	cout << "Y = " ;
         	cin.clear();
         	while(cin.get() != '\n');
         	{	
@@ -83,28 +87,30 @@ double SetY(){
 }
 
 
-
-
-
+//Menù for the user
 void Menu(){	
 
-	cout<<"____________________Menù____________________"<<endl;
-	cout<<"*Type 's' if you wanto to set a goal point"<<endl;
-	cout<<"*Type 'c' if you want to cancel the last goal"<<endl;
-	cout<<"*Type 'q' if you want to exit the node"<<endl;
-	cout<<"____________________________________________"<<endl;
+	cout<<"____________________Menù____________________\r"<<endl;
+	cout<<"*Type 's' if you wanto to set a goal point\r"<<endl;
+	cout<<"*Type 'c' if you want to cancel the last goal\r"<<endl;
+	cout<<"*Type 'q' if you want to exit the node\r"<<endl;
+	cout<<"____________________________________________\r"<<endl;
 }
 
 
+//function to save the input coordinates
 void InputCoord(){
 
 	X = SetX();
 	Y = SetY();
+	system("clear");
 }
 
 
+//function for setting the coordinates of the goal
 void ReachGoal(){
 
+	//setting x and y coordinates
 	my_goal.goal.target_pose.pose.position.x = X;
 	my_goal.goal.target_pose.pose.position.y = Y;
 	// set the frame_id
@@ -112,30 +118,33 @@ void ReachGoal(){
 	//set the quaternion module equal to 1
 	my_goal.goal.target_pose.pose.orientation.w = 1;
 	
+	//set the status equal to true
 	goalStatus = true;
-	//start timer
-	//auto start = std::chrono::high_resolution_clock::now();
 	
 	pubGoal.publish(my_goal);
 }
 
 
+//function to cancel the goal
 void CancelGoal(){
 
-	actionlib_msgs::GoalID first_goal;
-	
-	goalStatus = false;
-	
-	pubCancel.publish(first_goal);
+	if(goalStatus){
+		
+		cout<<"canceling the goal"<<endl;
+		//set the goal to cancel equal to the current goal
+		lastGoal.id = goalID;
+		
+		pubCancel.publish(lastGoal);
+		
+		//set teh status equal to false
+		goalStatus = false;
+	}
+	else
+		cout<<"No goal set"<<endl;
 }
 
 
-void Run(std::chrono::milliseconds ms)
-{
-   
-    
-}
-
+//user decision handler
 void Decision(){
 
 	for(;;){
@@ -149,7 +158,7 @@ void Decision(){
 				if (goalStatus){
 					system("clear");
 					cout<<"A goal is alreasy set, wait until the reachment of the target or type 'c' to cancel the goal and set another goal"<<endl;
-		
+					cout<<"Goal set, the robot is moving to ["<< xG <<", " << yG <<"]"<<endl;
 				}
 				else{
 					
@@ -160,27 +169,25 @@ void Decision(){
 				break;
 			case 'C':
 			case 'c':
-				if (goalStatus){
 				
-					cout<<"cancelling the goal"<<endl;
-					CancelGoal();
-				}
-				else{
-				
-					cout<<"No goal set"<<endl;
-				}
+				CancelGoal();
 				sleep(1);
 				system("clear");
+				
 				break;
 			case 'Q':
 			case 'q':
+			
 				cout<<"Exiting the node..."<<endl;
 				CancelGoal();
 				system("clear");
 				exit(0);
+				
 				break;
 			default:
+			
 				cout<<"Invalid input, retry!"<<endl;
+				
 				break;			
 		}
 	}
@@ -188,14 +195,14 @@ void Decision(){
 
 
 // function to take the status: in particular the actual goal id
-void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg)
-{
+void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
+
 	// set the goalID variable with the value of the actual goal id
 	goalID = msg -> status.goal_id.id;
 	
 	// check the presence of a goal
-	if(goalStatus)
-	{
+	if(goalStatus){
+	
 		// check the distance of both coordinates to see if the robot is near the goal
 		if(abs(msg -> feedback.base_position.pose.position.x - xG) <= error && abs(msg -> feedback.base_position.pose.position.y - yG) <= error)
 		{
@@ -207,39 +214,23 @@ void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg)
 			// print
 			std::cout << "Goal reached successfully!\n";
 			
+			//showing the menu to the user
 			Menu();
 		}
 		
-    		/*if(std::chrono::system_clock::now() > end) // still less than the end?
-    		{
-    			CancelGoal();
-    		}
-    		else{
-    		
-    			cout<<"running"<<endl;
-    		}
-    		
-		auto end = std::chrono::high_resolution_clock::now();
-		
-		auto deltaT = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-		if(deltaT > TIMEOUT){
-		
-			cout << "goal supposed to be unreachable" <<endl;
-			CancelGoal();
-		}*/
 	}
 }
 
 
 // function to store the current goal of the robot
-void currGoal(const move_base_msgs::MoveBaseActionGoal::ConstPtr& m)
+void CurrentGoal(const move_base_msgs::MoveBaseActionGoal::ConstPtr& m)
 {
 	// get x coordinate of the current goal
 	xG = m -> goal.target_pose.pose.position.x;
 	// get y coordinate of the current goal
 	yG = m -> goal.target_pose.pose.position.y;
 	
-	cout<<"Goal set, the robot is moving to ["<< xG <<"," << yG <<"]"<<endl;
+	cout<<"Goal set, the robot is moving to ["<< xG <<", " << yG <<"]"<<endl;
 }
 
 
@@ -259,13 +250,14 @@ int main(int argc, char **argv){
 	ros::Subscriber sub = nh.subscribe("/move_base/feedback", 1, GoalStatus);
 	
 	// subscribe to the topic goal to have the current status always available and updated
-	ros::Subscriber subG = nh.subscribe("/move_base/goal", 1, currGoal);
+	ros::Subscriber subG = nh.subscribe("/move_base/goal", 1, CurrentGoal);
 	
+	//multi-threading
 	ros::AsyncSpinner spinner(4);
 	
 	spinner.start();
 	
-		Decision();	
+		Decision();//enter in the menù	
 	
 	spinner.stop();
 	

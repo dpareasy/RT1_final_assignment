@@ -24,6 +24,11 @@ double min_right;
 double min_left;
 double min_front;
 
+//NOT USED BUT CAN BE USEFUL 
+//FOR POSSIBLE IMPROVEMENTS
+//double min_front_left;
+//double min_front_right;
+
 //defining a threashold
 double th = 0.8;
 
@@ -40,6 +45,7 @@ ros::Publisher pub;
 geometry_msgs::Twist my_vel;
 
 
+//Give the user the possibility to exit the node
 void Quit(){
 
 	for(;;){
@@ -51,6 +57,9 @@ void Quit(){
 		
 			case 'Q':
 			case 'q':
+				my_vel.linear.x = 0;
+				my_vel.angular.z = 0;
+				pub.publish(my_vel);
 				exit (0);
 				break;
 			default:
@@ -67,41 +76,37 @@ void GetVelocity(const geometry_msgs::Twist::ConstPtr& V){
 }
 
 
-//function that allows to 
+//function that allows to assist the robot navigation
 void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 
 	//Here each array for visual ranges is created. 
 	//I decided to divide the visual field of the robot in 5 sections
 	//but for make it avoid obstacles front_right_distance 
-	//and front_left_distance are not used.
+	//and front_left_distance are not used in this environment.
+	//They can be used for possible improvements.
 	for (int i = 0; i < msg->ranges.size(); i++){
 	
 		//The array for the right visual field. 
-		//It is between an agle of 170 and 180 degrees.
 		for(int h = 0; h < RIGHT_DIM; h++){
 		
 			right_dist[h] = msg->ranges[i++];
 		}
 		//The array for the front-right visual field. 
-		//It is between an agle of 110 and 170 degrees.
 		for(int j = 0; j < FRONT_RIGHT_DIM; j++){
 		
 			front_right_dist[j] = msg->ranges[i++];
 		}
 		//The array for the frontal visual field. 
-		//It is between an agle of 70 and 110 degrees.
 		for(int k = 0; k < FRONT_DIM; k++){
 		
 			front_dist[k] = msg->ranges[i++];
 		}
 		//The array for the front-left visual field. 
-		//It is between an agle of 10 and 70 degrees.
 		for(int l = 0; l < FRONT_LEFT_DIM; l++){
 		
 			front_left_dist[l] = msg->ranges[i++];
 		}
 		//The array for the left visual field.
-		//It is between an agle of 0 and 10 degrees.
 		for(int n = 0; n < LEFT_DIM; n++){
 		
 			left_dist[n] = msg->ranges[i++];
@@ -117,12 +122,30 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 			min_right = right_dist[i];
 	}
 	
+	/* USEFUL FOR POSSIBLE IMPROVEMENT IN THE DETECTION OF THE WALLS
+	min_front_right = front_right_dist[0];
+	for(int i=0; i<RIGHT_DIM; i++){
+	
+		if(min_front_right > front_right_dist[i])
+			min_front_right = front_right_dist[i];
+	}
+	*/
+	
 	min_front = front_dist[0];
 	for(int i=0; i<FRONT_DIM; i++){
 	
 		if(min_front > front_dist[i])
 			min_front = front_dist[i];
 	}
+	
+	/* USEFUL FOR POSSIBLE IMPROVEMENT IN THE DETECTION OF THE WALLS
+	min_front_left = front_left_dist[0];
+	for(int i=0; i<LEFT_DIM; i++){
+	
+		if(min_front_left > front_left_dist[i])
+			min_front_left = front_left_dist[i];
+	}
+	*/
 		
 	min_left = left_dist[0];
 	for(int i=0; i<LEFT_DIM; i++){
@@ -131,7 +154,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 			min_left = left_dist[i];
 	}
 	
-	//uodating linear and angular velocity
+	//updating linear and angular velocity
 	my_vel.linear.x = linearV;
 	my_vel.angular.z = angularV;
 	
@@ -141,8 +164,9 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	
 		system("clear");
 		cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+		
 		//warn the user
-		cout<<"Wall detected in front, tuorn either left or right"<<endl;
+		cout<<"!!WARNING!!\nWall detected in front: tuorn either left or right"<<endl;
 		
 		//set linear velocity equal to zero
 		my_vel.linear.x = 0;
@@ -154,7 +178,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 			system("clear");
 			cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 			//ask the user to turn right
-			cout <<"Wall detected on the left, adjusting trajectory!"<<endl;
+			cout <<"!!WARNING!!\nWall detected on the left, adjusting trajectory!"<<endl;
 			
 			//set angular velocity equal to zero
 			my_vel.angular.z = -1;
@@ -167,7 +191,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 			system("clear");
 			cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
 			//ask the user tu turn left
-			cout <<"Wall detected on the right, adjusting trajectory!"<<endl;		
+			cout <<"!!WARNING!!\nWall detected on the right, adjusting trajectory!"<<endl;		
 			
 			//set nagular velocity equal to zero
 			my_vel.angular.z = 1;
@@ -176,10 +200,11 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 	else{		
 		system("clear");
 		cout<<"type 'Q' if you want to exit the node\n\n\n\n\n\n\n\n\n\n\n\n\n"<<endl;
+		
 		//No wall detected
 		cout<<"No walls in the vicinity, drive the robot with the keyboard!"<<endl;
 	}
-			
+	//publishing the value of the velocities		
 	pub.publish(my_vel);
 }
 
