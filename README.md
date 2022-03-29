@@ -161,9 +161,9 @@ for(;;){
 
 ```
 
-#### Fucntions used ####
+#### Important Fucntions ####
 
-SetGoal function:
+SetGoal() function:
 
 Used to set a goal to reach.
 
@@ -182,9 +182,10 @@ void SetGoal(){
 ```
 
 
-CancelGoal():
 
-Used to cancel, if it exists, the last goal set.
+CancelGoal() function:
+
+Used to cancel, if it exists, the last goal saved.
 
 ```
 CancelGoal(){
@@ -205,7 +206,9 @@ CancelGoal(){
 
 ```
 
-CurrentGoal():
+
+
+CurrentGoal() function:
 
 Used to store the position of the current goal.
 
@@ -220,7 +223,9 @@ CurrentGoal(){
 ```
 
 
-GoalStatus():
+
+
+GoalStatus() function:
 
 Used to check the status of the goal to inform the user that a goal is reached.
 
@@ -250,7 +255,6 @@ GoalStatus(){
 In this node one subscriber subscribes on `/cmd_vel_assisted` topic to get the robot velocities from the teleop_twist_keyboard node and a second one subscribes on `/scan` topic to get the distance of the robot from the walls. There is also a publisher to publish velocities that the robot has to move within the environment, publishing on `/cmd_vel`.
 
 ```
-
 Divide ranges array into five subarrays;
 //only three are used (front_right and front_left are not used)
 
