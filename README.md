@@ -41,19 +41,17 @@ It includes the launchfile for the simulation, the move_base package and the UI.
 
 ## Robot behaviors ##
 
-When the user launches the simulation, the robot is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, the user can choose three different behaviors:
+When the user launches the simulation, the robot, provided with a laser-scan, is spawned in a pre-built environment, waiting for a command from the user. Once a command is given, the user can choose three different behaviors:
 
 ```
-1) The user will set a target on the environment in the ReachTarget node, and the robot must reach it.  
+1) The user can set a target within the environment in the ReachTarget node, that the robot must reach.  
 
-2) The Robot can move around the environment, driven by the user thanks to the teleop_twist_keyboard node of ROS.
+2) The user can make the robot move around the environment, driven with the teleop_twist_keyboard node of ROS.
 
-3) The robot can move around the environment, driven by the user thanks to the teleop_twist_keyboard node of ROS, by avoiding the walls thanks to a system of assisted navigation implemented in the AssistedNavigation node.
+3) The user can make the robot move around the environment, driven with the teleop_twist_keyboard node of ROS, by avoiding the walls thanks to a system of assisted navigation implemented in the AssistedNavigation node.
 ```
 
-Concerning the ReachTarget node, I have implemented a timeout to avoid the robot trying to reach a point out of the map. If the target point won't be reached by the robot after a certain time, the goal will be canceled.
-
-## About Software Architectures ##
+## About Software Architecture ##
 I decided to divide the project into four different nodes to maintain a certain degeree of modularity:
 
 * The UI.cpp;
@@ -61,7 +59,7 @@ I decided to divide the project into four different nodes to maintain a certain 
 * The AssistedDrive.cpp;
 * The teleop_twist_keyboard.py;
 
-From the UI.cpp, the user can choose the modality for moving the robot by typing commands from the keyboards. The user can decide on the autonomous navigation, the simple navigation with the keyboard, or the navigation with the keyboard assisted by a system of the assisted drive. If the user chooses the first modality, the UI.cpp will launch the ReachTarget node. This node will publish on the `/move_base/goal` topic the point decided by the user that the robot has to reach. In the same node, another publisher has the function of canceling the goal, giving the user the faculty of changing the robot goal by publishing on the `/move_base/cancel` topic.
+From the UI.cpp, the user can choose the modality for moving the robot by typing commands from the keyboards. The user can decide on the autonomous navigation, the simple navigation with the keyboard, or the navigation with the keyboard assisted by a system of the assisted drive. If the user chooses the first modality, the UI.cpp will launch the ReachTarget node. This node will publish on the `/move_base/goal` topic the point decided by the user that the robot has to reach. In the same node, another publisher has the function of canceling the goal, giving the user the faculty of changing the goal by publishing on the `/move_base/cancel` topic.
 If the choice falls into the simple keyboard navigation, the UI.cpp will launch the teleop_twist_keyboard.py provided by ROS, and the user can drive the robot with specific commands.
 Finally, if the user chooses the third modality, the UI.cpp node will launch a launch file containing the teleop_twist_keyboard.py and the AssistedDrive.cpp node. The latter will get info on the distance from walls by subscribing from the `/scan` topic, on the current velocity of the robot on the map by subscribing from the `/cmd_vel_assisted` topic, and will publish the velocity values on the `/cmd_vel` topic. If the robot gets too close to the walls, the laser scan with which the robot is equipped will detect it, and the system of the assisted drive will adjust the trajectory.
 
