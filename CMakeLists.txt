@@ -142,7 +142,6 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(user_interface_node src/UI.cpp)
 add_executable(reach_target_node src/ReachTarget.cpp)
-add_executable(teleopkey_node src/KeyboardNavigation.cpp)
 add_executable(teleopkey_avoidcoll_node src/AssistedDrive.cpp)
 
 
@@ -156,7 +155,6 @@ add_executable(teleopkey_avoidcoll_node src/AssistedDrive.cpp)
 ## same as for the library above
 add_dependencies(user_interface_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(reach_target_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(teleopkey_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(teleopkey_avoidcoll_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
@@ -164,7 +162,6 @@ add_dependencies(teleopkey_avoidcoll_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${
 ## Specify libraries to link a library or executable target against
 target_link_libraries(user_interface_node ${catkin_LIBRARIES})
 target_link_libraries(reach_target_node ${catkin_LIBRARIES})
-target_link_libraries(teleopkey_node ${catkin_LIBRARIES})
 target_link_libraries(teleopkey_avoidcoll_node ${catkin_LIBRARIES})
 
 #############

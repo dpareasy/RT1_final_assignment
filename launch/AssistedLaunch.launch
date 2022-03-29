@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+	<launch>
+		<node name = "AssistedDrive" pkg = "final_assignment" type = "teleopkey_avoidcoll_node" required = "true" output = "screen"/>
+ 		<node name = "teleop_twist_keyboard" pkg = "teleop_twist_keyboard" type = "teleop_twist_keyboard.py" output = "screen" required = "true" launch-prefix="xterm -e">
+ 			<remap from = "/cmd_vel" to = "/cmd_vel_assisted"/>
+ 		</node>
+ </launch>
