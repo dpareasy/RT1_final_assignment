@@ -256,6 +256,7 @@ publish velocities;
 
 One limitation could be that the robot does not save the values of the goals in a queue. To set another goal, the user has to wait until the robot reaches the first goal.
 Another limitation of the program is that I haven't implemented a system that automatically cancels the unreachable points on the map. In this case, the robot will infinitely try to reach these points unless the user manually cancels them once noticing the unreachability with the graphical help of the map. 
+
 It comes clear that two possible improvements to the code could be:
 * The implementation of a system for saving in a queue the goals that the user could give in input to the program
 * A way to state if the user has set an unreachable point for automatically deleting it.
