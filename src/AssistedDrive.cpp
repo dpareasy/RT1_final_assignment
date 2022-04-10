@@ -1,3 +1,22 @@
+/**
+*\file ReachTarget.cpp
+*\brief Autonomous navigation modality
+*\author Parisi Davide Leo S4329668
+*\version 1.0
+*\date 08/04/2022
+*\details
+*Subscribes to: <BR>
+* °/cmd_vel_assisted
+* °/scan
+*Publishes to: <BR>
+* °/cmd_vel
+*
+*Description:
+*
+*This node simulate the assistive nvigation of a robt within the environment. It asks the user to drive with the keyboard.
+*Once the robot detect a wall in the vicinity, a system of assisted drive will avoid the collision by adjusting the trajctory.
+**/
+
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
@@ -12,37 +31,34 @@ using namespace std;
 #define FRONT_LEFT_DIM 240
 #define LEFT_DIM 80
 
-//arrays for visual ranges
-double right_dist[RIGHT_DIM];
-double front_right_dist[FRONT_RIGHT_DIM];
-double front_dist[FRONT_DIM];
-double front_left_dist[FRONT_LEFT_DIM];
-double left_dist[LEFT_DIM];
+double right_dist[RIGHT_DIM]; ///< Array for right visual range
+double front_right_dist[FRONT_RIGHT_DIM]; ///< Array for front-right visual range
+double front_dist[FRONT_DIM]; ///< Array for frontal visual range
+double front_left_dist[FRONT_LEFT_DIM]; ///< Array for front left visual range
+double left_dist[LEFT_DIM]; ///< Array for left visual range
 
-//minimum distances
-double min_right;
-double min_left;
-double min_front;
+double min_right; ///< variable for minimum value of right visual range
+double min_left; ///< variable for minimum value of left visual range
+double min_front; ///< variable for minimum value of front visual range
 
 //NOT USED BUT CAN BE USEFUL 
 //FOR POSSIBLE IMPROVEMENTS
 //double min_front_left;
 //double min_front_right;
 
-//defining a threashold
-double th = 0.8;
+double th = 0.8; ///< defining a threashold 
 
 //initialize the value of the velocities
-double linearV;
-double angularV;
+double linearV; ///< variable for the linear velocity
+double angularV; ///< variable for the angular velocity
 
 //The publisher is defined as global variable because 
 //I have to initialize it in the Main function but 
 //use it also in the Callback function
-ros::Publisher pub; 
+ros::Publisher pubV; ///< The publisher to publish velocity
 
 //defining my_vel variable
-geometry_msgs::Twist my_vel;
+geometry_msgs::Twist my_vel; ///< The variable to 
 
 
 //Give the user the possibility to exit the node
@@ -59,7 +75,7 @@ void Quit(){
 			case 'q':
 				my_vel.linear.x = 0;
 				my_vel.angular.z = 0;
-				pub.publish(my_vel);
+				pubV.publish(my_vel);
 				exit (0);
 				break;
 			default:
@@ -68,7 +84,13 @@ void Quit(){
 		}
 	}
 }
-//function to get the robot velocity and save in a variable
+/**
+*\brief Description of GetVelocity() function:
+*
+*The aim of this function is to get the velocity of the robot
+*from the teleop_twist_keyboard and save them in two variables.
+*One for the linear velocity and the other for the angular velocity.
+**/
 void GetVelocity(const geometry_msgs::Twist::ConstPtr& V){
 
 	linearV = V -> linear.x;
@@ -76,7 +98,18 @@ void GetVelocity(const geometry_msgs::Twist::ConstPtr& V){
 }
 
 
-//function that allows to assist the robot navigation
+/**
+*\brief Description of AssistedNavigation() function:
+*
+*In this function each array for visual ranges is created.
+*I decided to divide the visual field of the robot in 5 sections.
+*But for making it avoid obstacles two of them aren't considered
+*in this envinronments. They can be used for possible improvements.
+*This function has the aim of detecting when the robot gets too close 
+*to the walls under a prefixed threshol. When this happens, the user is 
+*notified and the robot will adjusts its trajectory or by its own or with 
+*the help of the user.
+**/
 void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 
 	//Here each array for visual ranges is created. 
@@ -205,7 +238,7 @@ void AssistedNavigation(const sensor_msgs::LaserScan::ConstPtr& msg){
 		cout<<"No walls in the vicinity!\nDrive the robot with the keyboard in the other konsole!"<<endl;
 	}
 	//publishing the value of the velocities		
-	pub.publish(my_vel);
+	pubV.publish(my_vel);
 }
 
 
@@ -216,7 +249,7 @@ int main(int argc, char **argv){
 	ros::NodeHandle nh;
 	
 	//publisher to publish the velocities on the topic
-	pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
+	pubV = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
 	
 	//subscriber for getting the robot velocity 
 	ros::Subscriber subV = nh.subscribe("/cmd_vel_assisted", 1, GetVelocity);
@@ -225,6 +258,7 @@ int main(int argc, char **argv){
 	//the topic in which the other nodes use to publish their position
 	ros::Subscriber sub = nh.subscribe("/scan", 1, AssistedNavigation); 
 	
+	//multi-threading
 	ros::AsyncSpinner spinner(4);
 	
 	spinner.start();

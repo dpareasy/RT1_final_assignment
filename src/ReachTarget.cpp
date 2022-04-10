@@ -1,3 +1,24 @@
+/**
+*\file ReachTarget.cpp
+*\brief Autonomous navigation modality
+*\author Parisi Davide Leo S4329668
+*\version 1.0
+*\date 08/04/2022
+*\details
+*Subscribes to: <BR>
+* °/move_base/feedback
+* °/move_base/goal
+*Publishes to: <BR>
+* °/move_base/goal
+* °/move_base/cancel
+*
+*Description:
+*
+*This node simulate the autonomous nvigation of a robt within the environment. It asks the user to insert a goal point.
+*Once inserted the user can decide to cancel the actual goal or to exit the modality. If a goal point is already defined
+*the user can't choose another unless he cancel it.
+**/
+
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "move_base_msgs/MoveBaseActionGoal.h"
@@ -15,41 +36,37 @@ using namespace std;
 //I have to initialize it in the Main function but 
 //use it also in the Reach_point function
 //publish the target point
-ros::Publisher pubGoal; 
-ros::Publisher pubCancel;
+ros::Publisher pubGoal; ///< Publisher for publishing the goal point
 
-//initializing the goal variable
-move_base_msgs::MoveBaseActionGoal my_goal;
+ros::Publisher pubCancel; ///< Publisher to cancel the goal
 
-//variable for the last goal to cancel
-actionlib_msgs::GoalID lastGoal;
+move_base_msgs::MoveBaseActionGoal my_goal; ///< Variable for saving the chosen goal
 
+actionlib_msgs::GoalID lastGoal; ///< Variable for the last goal to cancel 
 
-//variable used to save the actual goal
-std::string goalID;
-
- //X and Y coord
-double X, Y;
+std::string goalID; ///< Variable used to save the actual goal
 
 
-// define variables to store the goal
-float xG;
-float yG;
-
-//set a boolean to state if the goal is set 
-bool goalStatus = false;
+double X, Y; ///< X and Y coordinates of the goal
 
 
-//define an error threshold 
-//used for the position of the robot
-float error = 0.5;
+float xG; ///< X variable to store the goal
+float yG; ///< Y variable to store the goal
+
+ 
+bool goalStatus = false; ///< Boolean to state if a goal is set
 
 
-//Here follows two function to save the x and y coordinates
-//values. The functions check if the inputs are number or not
-//if they are, return the values, in the other case the function
-//will continue to ask to insert a value
-//set X coordinate
+float error = 0.5; ///< Error for the position of the robot wrt the goal point
+
+
+/**
+*\brief Description of SetX() function:
+*
+*The aim of this function is to check if the inputs are numbers or not
+*if they are, return the values, in the other case the function
+*will continue to ask to insert a value for the X coordinate.
+**/
 double SetX(){
 	
 	double x;
@@ -68,7 +85,13 @@ double SetX(){
 }
 
 
-//set Y coordinate
+/**
+*\brief Description of SetY() function:
+*
+*The aim of this function is to check if the inputs are numbers or not
+*if they are, return the values, in the other case the function
+*will continue to ask to insert a value for the Y coordinate.
+**/
 double SetY(){
 
 	double y;
@@ -87,7 +110,13 @@ double SetY(){
 }
 
 
-//Menù for the user
+/**
+*\brief Description of Menu() function:
+*
+*The aim of this function is to ask the user to give commands to
+*the robot. The user can choose for publishin a goal, canceling the
+*last goal or exiting the autonomous navigation modality.
+**/
 void Menu(){	
 
 	cout<<"____________________Menù____________________\r"<<endl;
@@ -98,7 +127,12 @@ void Menu(){
 }
 
 
-//function to save the input coordinates
+/**
+\brief Description of InputCoord() function:
+*
+*In this function the x and y coordinate gotten as an input 
+*are saved in two global variables
+**/
 void InputCoord(){
 
 	X = SetX();
@@ -107,7 +141,13 @@ void InputCoord(){
 }
 
 
-//function for setting the coordinates of the goal
+/**
+*\brief Description of SetGoal() function:
+*
+*In this function the goal point is set and the 
+*variable which state that the goal is saved, and the
+*robot is moving to it. 
+**/
 void SetGoal(){
 
 	InputCoord();
@@ -126,7 +166,14 @@ void SetGoal(){
 }
 
 
-//function to cancel the goal
+/**
+*\brief Description of CancelGoal() function:
+*
+*In this function the current goal saved is canceled 
+*and the variable that gives information about the 
+*goal status is set to false, to state that no goal is set.
+*If no goal is set, nothing would happen. 
+**/
 void CancelGoal(){
 
 	if(goalStatus){
@@ -139,7 +186,7 @@ void CancelGoal(){
 		
 		pubCancel.publish(lastGoal);
 		
-		//set teh status equal to false
+		//set the status equal to false
 		goalStatus = false;
 	}
 	else
@@ -147,7 +194,12 @@ void CancelGoal(){
 }
 
 
-//user decision handler
+/**
+*\brief Description of Decision() function:
+*
+*In this function the input from the user is saved and andled to perform the 
+*desired behaviour.
+**/
 void Decision(){
 
 	for(;;){
@@ -195,7 +247,13 @@ void Decision(){
 }
 
 
-// function to take the status: in particular the actual goal id
+/**
+*\brief Description of GoalStatus() function:
+*
+*In this function the goal status is saved. When the robot reaches the target
+*a message will notifies the user that the goal is reached, theen the robot is 
+*ready for another target.
+**/
 void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
 
 	// set the goalID variable with the value of the actual goal id
@@ -224,7 +282,12 @@ void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
 }
 
 
-// function to store the current goal of the robot
+/**
+*\brief Description of CurrentGoal() function:
+*
+*In this function the goal position is saved to inform the user
+*about the next target of the robot.
+**/
 void CurrentGoal(const move_base_msgs::MoveBaseActionGoal::ConstPtr& m)
 {
 	// get x coordinate of the current goal
@@ -234,6 +297,7 @@ void CurrentGoal(const move_base_msgs::MoveBaseActionGoal::ConstPtr& m)
 	
 	cout<<"Goal set, the robot is moving to ["<< xG <<", " << yG <<"]"<<endl;
 }
+
 
 
 int main(int argc, char **argv){
@@ -246,7 +310,7 @@ int main(int argc, char **argv){
 	pubGoal = nh.advertise<move_base_msgs::MoveBaseActionGoal>("/move_base/goal", 1);
 	
 	// publisher to send message for canceling the goal
-	pubCancel = nh.advertise<actionlib_msgs::GoalID>("move_base/cancel",1);
+	pubCancel = nh.advertise<actionlib_msgs::GoalID>("/move_base/cancel",1);
 	
 	// subscribe to the topic feedback to have the status always available and updated
 	ros::Subscriber sub = nh.subscribe("/move_base/feedback", 1, GoalStatus);
