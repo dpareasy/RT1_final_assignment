@@ -302,4 +302,3 @@ It comes clear that two possible improvements to the code could be:
 ## Documentation ##
 
  https://dpareasy.github.io/final_assignment/
-file:///root/Desktop/ResearchTrack1/my_ros_ws/src/final_assignment/docs/index.html
