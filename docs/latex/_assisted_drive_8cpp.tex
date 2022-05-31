@@ -1,0 +1,154 @@
+\hypertarget{_assisted_drive_8cpp}{}\doxysection{src/\+Assisted\+Drive.cpp File Reference}
+\label{_assisted_drive_8cpp}\index{src/AssistedDrive.cpp@{src/AssistedDrive.cpp}}
+
+
+Collision Avoidance.  
+
+
+{\ttfamily \#include \char`\"{}ros/ros.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}geometry\+\_\+msgs/\+Twist.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}sensor\+\_\+msgs/\+Laser\+Scan.\+h\char`\"{}}\newline
+Include dependency graph for Assisted\+Drive.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_assisted_drive_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_aabb02f8c7243c40eff565a5f8981d84f}\label{_assisted_drive_8cpp_aabb02f8c7243c40eff565a5f8981d84f}} 
+\#define {\bfseries R\+I\+G\+H\+T\+\_\+\+D\+IM}~80
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a496da4655a57687ca1a2bb19169fa08b}\label{_assisted_drive_8cpp_a496da4655a57687ca1a2bb19169fa08b}} 
+\#define {\bfseries F\+R\+O\+N\+T\+\_\+\+R\+I\+G\+H\+T\+\_\+\+D\+IM}~240
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_ac54d923cbed9bf1642cea7c673e0ae02}\label{_assisted_drive_8cpp_ac54d923cbed9bf1642cea7c673e0ae02}} 
+\#define {\bfseries F\+R\+O\+N\+T\+\_\+\+D\+IM}~80
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a0787329813fdcf88e128d2f118e3d8d8}\label{_assisted_drive_8cpp_a0787329813fdcf88e128d2f118e3d8d8}} 
+\#define {\bfseries F\+R\+O\+N\+T\+\_\+\+L\+E\+F\+T\+\_\+\+D\+IM}~240
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a94d80a1d471dd12290ae15adfb131b8f}\label{_assisted_drive_8cpp_a94d80a1d471dd12290ae15adfb131b8f}} 
+\#define {\bfseries L\+E\+F\+T\+\_\+\+D\+IM}~80
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{_assisted_drive_8cpp_ab931737e073f8a2f3c2fae9fe20c1783}{Quit}} ()
+\begin{DoxyCompactList}\small\item\em Description of \mbox{\hyperlink{_assisted_drive_8cpp_ab931737e073f8a2f3c2fae9fe20c1783}{Quit()}} function\+: \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_assisted_drive_8cpp_aa256784e422de59c21fea14caba85325}{Get\+Velocity}} (const geometry\+\_\+msgs\+::\+Twist\+::\+Const\+Ptr \&V)
+\begin{DoxyCompactList}\small\item\em Description of \mbox{\hyperlink{_assisted_drive_8cpp_aa256784e422de59c21fea14caba85325}{Get\+Velocity()}} function\+: \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_assisted_drive_8cpp_a59abe5e4f1eab1210b6d477f1eccbaab}{Assisted\+Navigation}} (const sensor\+\_\+msgs\+::\+Laser\+Scan\+::\+Const\+Ptr \&msg)
+\begin{DoxyCompactList}\small\item\em Description of \mbox{\hyperlink{_assisted_drive_8cpp_a59abe5e4f1eab1210b6d477f1eccbaab}{Assisted\+Navigation()}} function\+: \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}\label{_assisted_drive_8cpp_a3c04138a5bfe5d72780bb7e82a18e627}} 
+int {\bfseries main} (int argc, char $\ast$$\ast$argv)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_adb2f1df6110a1e9271b6a061dada2359}\label{_assisted_drive_8cpp_adb2f1df6110a1e9271b6a061dada2359}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_adb2f1df6110a1e9271b6a061dada2359}{right\+\_\+dist}} \mbox{[}R\+I\+G\+H\+T\+\_\+\+D\+IM\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array for right visual range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_ad04ec39fceb9344d960bb3fb4b86c4f7}\label{_assisted_drive_8cpp_ad04ec39fceb9344d960bb3fb4b86c4f7}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_ad04ec39fceb9344d960bb3fb4b86c4f7}{front\+\_\+right\+\_\+dist}} \mbox{[}F\+R\+O\+N\+T\+\_\+\+R\+I\+G\+H\+T\+\_\+\+D\+IM\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array for front-\/right visual range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a63997f055d5196998c9e41f6ca780a34}\label{_assisted_drive_8cpp_a63997f055d5196998c9e41f6ca780a34}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a63997f055d5196998c9e41f6ca780a34}{front\+\_\+dist}} \mbox{[}F\+R\+O\+N\+T\+\_\+\+D\+IM\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array for frontal visual range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a1b7c0eba8ebd6faca1726b34433dabdf}\label{_assisted_drive_8cpp_a1b7c0eba8ebd6faca1726b34433dabdf}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a1b7c0eba8ebd6faca1726b34433dabdf}{front\+\_\+left\+\_\+dist}} \mbox{[}F\+R\+O\+N\+T\+\_\+\+L\+E\+F\+T\+\_\+\+D\+IM\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array for front left visual range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_aa8b7fb805e5d169d602f86b767522c94}\label{_assisted_drive_8cpp_aa8b7fb805e5d169d602f86b767522c94}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_aa8b7fb805e5d169d602f86b767522c94}{left\+\_\+dist}} \mbox{[}L\+E\+F\+T\+\_\+\+D\+IM\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array for left visual range. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_aeb9a34b040a55242a36f31e36842b9ef}\label{_assisted_drive_8cpp_aeb9a34b040a55242a36f31e36842b9ef}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_aeb9a34b040a55242a36f31e36842b9ef}{min\+\_\+right}}
+\begin{DoxyCompactList}\small\item\em variable for minimum value of right visual range \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a11a5d7ab7ad80a07d9947cad7ca32b8c}\label{_assisted_drive_8cpp_a11a5d7ab7ad80a07d9947cad7ca32b8c}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a11a5d7ab7ad80a07d9947cad7ca32b8c}{min\+\_\+left}}
+\begin{DoxyCompactList}\small\item\em variable for minimum value of left visual range \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a35a8edc78e8599a3a5c273fda109f425}\label{_assisted_drive_8cpp_a35a8edc78e8599a3a5c273fda109f425}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a35a8edc78e8599a3a5c273fda109f425}{min\+\_\+front}}
+\begin{DoxyCompactList}\small\item\em variable for minimum value of front visual range \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_aa78c78a33ff8aacecd1105f94444acd3}\label{_assisted_drive_8cpp_aa78c78a33ff8aacecd1105f94444acd3}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_aa78c78a33ff8aacecd1105f94444acd3}{th}} = 0.\+8
+\begin{DoxyCompactList}\small\item\em defining a threashold \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a7e422b598562cf7c2ddf72c3616500be}\label{_assisted_drive_8cpp_a7e422b598562cf7c2ddf72c3616500be}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a7e422b598562cf7c2ddf72c3616500be}{linearV}}
+\begin{DoxyCompactList}\small\item\em variable for the linear velocity \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a7ab379e538beeb6f48832fcd07fd5324}\label{_assisted_drive_8cpp_a7ab379e538beeb6f48832fcd07fd5324}} 
+double \mbox{\hyperlink{_assisted_drive_8cpp_a7ab379e538beeb6f48832fcd07fd5324}{angularV}}
+\begin{DoxyCompactList}\small\item\em variable for the angular velocity \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_acc3d127c97446f878d9550daf52cdb06}\label{_assisted_drive_8cpp_acc3d127c97446f878d9550daf52cdb06}} 
+ros\+::\+Publisher \mbox{\hyperlink{_assisted_drive_8cpp_acc3d127c97446f878d9550daf52cdb06}{pubV}}
+\begin{DoxyCompactList}\small\item\em The publisher to publish velocity. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{_assisted_drive_8cpp_a58b913289dd9ed4f654dfbd74c11b790}\label{_assisted_drive_8cpp_a58b913289dd9ed4f654dfbd74c11b790}} 
+geometry\+\_\+msgs\+::\+Twist \mbox{\hyperlink{_assisted_drive_8cpp_a58b913289dd9ed4f654dfbd74c11b790}{my\+\_\+vel}}
+\begin{DoxyCompactList}\small\item\em The variable to. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Collision Avoidance. 
+
+\begin{DoxyAuthor}{Author}
+Parisi Davide Leo S4329668 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+08/04/2022
+\end{DoxyDate}
+Subscribes to\+: ~\newline
+ /cmd\+\_\+vel\+\_\+assisted /scan Publishes to\+: ~\newline
+ /cmd\+\_\+vel
+
+Description\+:
+
+This node simulate the assisted nvigation of a robt within the environment. It asks the user to drive with the keyboard. Once the robot detect a wall in the vicinity, a system of assisted drive will make the robot avoid collisions by adjusting the trajctory. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{_assisted_drive_8cpp_a59abe5e4f1eab1210b6d477f1eccbaab}\label{_assisted_drive_8cpp_a59abe5e4f1eab1210b6d477f1eccbaab}} 
+\index{AssistedDrive.cpp@{AssistedDrive.cpp}!AssistedNavigation@{AssistedNavigation}}
+\index{AssistedNavigation@{AssistedNavigation}!AssistedDrive.cpp@{AssistedDrive.cpp}}
+\doxysubsubsection{\texorpdfstring{AssistedNavigation()}{AssistedNavigation()}}
+{\footnotesize\ttfamily void Assisted\+Navigation (\begin{DoxyParamCaption}\item[{const sensor\+\_\+msgs\+::\+Laser\+Scan\+::\+Const\+Ptr \&}]{msg }\end{DoxyParamCaption})}
+
+
+
+Description of \mbox{\hyperlink{_assisted_drive_8cpp_a59abe5e4f1eab1210b6d477f1eccbaab}{Assisted\+Navigation()}} function\+: 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & is a pointer to the message published on /scan topic.\\
+\hline
+\end{DoxyParams}
+In this function each array for visual ranges is created. I decided to divide the visual field of the robot in 5 sections. But for making it avoid obstacles two of them aren\textquotesingle{}t considered in this envinronments. They can be used for possible improvements. This function has the aim of detecting when the robot gets too close to the walls under a prefixed threshol. When this happens, the user is notified and the robot will adjusts its trajectory or by its own or with the help of the user. \mbox{\Hypertarget{_assisted_drive_8cpp_aa256784e422de59c21fea14caba85325}\label{_assisted_drive_8cpp_aa256784e422de59c21fea14caba85325}} 
+\index{AssistedDrive.cpp@{AssistedDrive.cpp}!GetVelocity@{GetVelocity}}
+\index{GetVelocity@{GetVelocity}!AssistedDrive.cpp@{AssistedDrive.cpp}}
+\doxysubsubsection{\texorpdfstring{GetVelocity()}{GetVelocity()}}
+{\footnotesize\ttfamily void Get\+Velocity (\begin{DoxyParamCaption}\item[{const geometry\+\_\+msgs\+::\+Twist\+::\+Const\+Ptr \&}]{V }\end{DoxyParamCaption})}
+
+
+
+Description of \mbox{\hyperlink{_assisted_drive_8cpp_aa256784e422de59c21fea14caba85325}{Get\+Velocity()}} function\+: 
+
+
+\begin{DoxyParams}{Parameters}
+{\em V} & it\textquotesingle{}s a pointer to the message published on /cmd\+\_\+vel\+\_\+assisted topic.\\
+\hline
+\end{DoxyParams}
+The aim of this function is to get the velocity of the robot from the teleop\+\_\+twist\+\_\+keyboard and save them in two variables. One for the linear velocity and the other for the angular velocity. \mbox{\Hypertarget{_assisted_drive_8cpp_ab931737e073f8a2f3c2fae9fe20c1783}\label{_assisted_drive_8cpp_ab931737e073f8a2f3c2fae9fe20c1783}} 
+\index{AssistedDrive.cpp@{AssistedDrive.cpp}!Quit@{Quit}}
+\index{Quit@{Quit}!AssistedDrive.cpp@{AssistedDrive.cpp}}
+\doxysubsubsection{\texorpdfstring{Quit()}{Quit()}}
+{\footnotesize\ttfamily void Quit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Description of \mbox{\hyperlink{_assisted_drive_8cpp_ab931737e073f8a2f3c2fae9fe20c1783}{Quit()}} function\+: 
+
+The aim of this function is to give the user the possibility to exit the modality. 

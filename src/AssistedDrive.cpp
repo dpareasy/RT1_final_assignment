@@ -1,20 +1,21 @@
 /**
-*\file ReachTarget.cpp
-*\brief Autonomous navigation modality
+*\file AssistedDrive.cpp
+*\brief Collision Avoidance
 *\author Parisi Davide Leo S4329668
 *\version 1.0
 *\date 08/04/2022
 *\details
+*
 *Subscribes to: <BR>
-* °/cmd_vel_assisted
-* °/scan
+* /cmd_vel_assisted
+* /scan
 *Publishes to: <BR>
-* °/cmd_vel
+* /cmd_vel
 *
 *Description:
 *
-*This node simulate the assistive nvigation of a robt within the environment. It asks the user to drive with the keyboard.
-*Once the robot detect a wall in the vicinity, a system of assisted drive will avoid the collision by adjusting the trajctory.
+*This node simulate the assisted nvigation of a robt within the environment. It asks the user to drive with the keyboard.
+*Once the robot detect a wall in the vicinity, a system of assisted drive will make the robot avoid collisions by adjusting the trajctory.
 **/
 
 #include "ros/ros.h"
@@ -61,7 +62,12 @@ ros::Publisher pubV; ///< The publisher to publish velocity
 geometry_msgs::Twist my_vel; ///< The variable to 
 
 
-//Give the user the possibility to exit the node
+/**
+*\brief Description of Quit() function:
+*
+*The aim of this function is to give the user the 
+*possibility to exit the modality.
+**/
 void Quit(){
 
 	for(;;){
@@ -87,6 +93,8 @@ void Quit(){
 /**
 *\brief Description of GetVelocity() function:
 *
+*\param V it's a pointer to the message published on /cmd_vel_assisted topic.
+*
 *The aim of this function is to get the velocity of the robot
 *from the teleop_twist_keyboard and save them in two variables.
 *One for the linear velocity and the other for the angular velocity.
@@ -100,6 +108,8 @@ void GetVelocity(const geometry_msgs::Twist::ConstPtr& V){
 
 /**
 *\brief Description of AssistedNavigation() function:
+*
+*\param msg is a pointer to the message published on /scan topic.
 *
 *In this function each array for visual ranges is created.
 *I decided to divide the visual field of the robot in 5 sections.

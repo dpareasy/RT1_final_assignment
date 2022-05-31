@@ -5,12 +5,13 @@
 *\version 1.0
 *\date 08/04/2022
 *\details
+*
 *Subscribes to: <BR>
-* °/move_base/feedback
-* °/move_base/goal
+* /move_base/feedback
+* /move_base/goal
 *Publishes to: <BR>
-* °/move_base/goal
-* °/move_base/cancel
+* /move_base/goal
+* /move_base/cancel
 *
 *Description:
 *
@@ -63,6 +64,8 @@ float error = 0.5; ///< Error for the position of the robot wrt the goal point
 /**
 *\brief Description of SetX() function:
 *
+*return the x coordinate chosen by the user
+*
 *The aim of this function is to check if the inputs are numbers or not
 *if they are, return the values, in the other case the function
 *will continue to ask to insert a value for the X coordinate.
@@ -87,6 +90,8 @@ double SetX(){
 
 /**
 *\brief Description of SetY() function:
+*
+*return the y coordinate chosen by the user
 *
 *The aim of this function is to check if the inputs are numbers or not
 *if they are, return the values, in the other case the function
@@ -250,6 +255,8 @@ void Decision(){
 /**
 *\brief Description of GoalStatus() function:
 *
+*\param msg it's a message published on /move_base/feedback topic.
+*
 *In this function the goal status is saved. When the robot reaches the target
 *a message will notifies the user that the goal is reached, theen the robot is 
 *ready for another target.
@@ -284,6 +291,8 @@ void GoalStatus(const move_base_msgs::MoveBaseActionFeedback::ConstPtr& msg){
 
 /**
 *\brief Description of CurrentGoal() function:
+*
+*\param m it's a message published on /move_base/goal topic.
 *
 *In this function the goal position is saved to inform the user
 *about the next target of the robot.
