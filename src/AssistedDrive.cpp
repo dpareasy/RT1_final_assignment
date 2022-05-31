@@ -8,8 +8,11 @@
 *
 *Subscribes to: <BR>
 * /cmd_vel_assisted
+*
 * /scan
+*
 *Publishes to: <BR>
+*
 * /cmd_vel
 *
 *Description:

@@ -6,6 +6,7 @@
 *\version 1.0
 *\date 08/04/2022
 *\details 
+*
 *Description:
 *This node does not Publish or Subscribe on any topic. It's a graphical user interface that asks a user, with a menù, to select a modality for driving a robot around a particular 
 *environment. The user's choice is saved in a global variable and handled by the program, which will run the node that manages the chosen modality.

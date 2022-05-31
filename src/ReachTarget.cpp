@@ -8,9 +8,12 @@
 *
 *Subscribes to: <BR>
 * /move_base/feedback
+*
 * /move_base/goal
+*
 *Publishes to: <BR>
 * /move_base/goal
+*
 * /move_base/cancel
 *
 *Description:
